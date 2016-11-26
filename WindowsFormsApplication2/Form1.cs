@@ -74,7 +74,10 @@ namespace WindowsFormsApplication2
                 }
                 b = sum.ToString();
                 if (b.Length<2) {b = ' ' + b; }
-                if(a != b) { MessageBox.Show("Wrong pass"); }
+                if(a != b)
+                {
+                    MessageBox.Show("Wrong pass");
+                }
             }
         }
         private void userControl11_BackEvent()
