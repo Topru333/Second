@@ -16,7 +16,7 @@ namespace WindowsFormsApplication2
         {
             InitializeComponent();
         }
-        private string Text
+        private string textTo
         {
             set { this.textBox1.Text = value; }
             get { return this.textBox1.Text; }
@@ -24,13 +24,12 @@ namespace WindowsFormsApplication2
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            textBox1.Text = "";   
-
+            textTo = "";   
         }
 
         private void Get_number()
         {
-            Text = userControl11.Numbers;
+            textTo = userControl11.Numbers;
         }
 
         private void userControl11_MouseClick(object sender, MouseEventArgs e)
@@ -40,17 +39,52 @@ namespace WindowsFormsApplication2
         
         private void userControl11_numEvent(object sender, ClassLibrary1.UserControl1.NumArgs e)
         {
-            Text = Text + e.n;
+            if (textTo.Length == 3|| textTo.Length == 7 || textTo.Length == 11) { textTo = textTo + '-'; }
+            if (textTo.Length < 14)
+            {
+                textTo = textTo + e.n;
+            }
+            else { Check(); }
         }
 
         private void userControl11_DeleteEvent()
         {
-            Text = "";
+            textTo = "";
         }
-
+        private void Check()
+        {
+            if (textTo.Length == 14)
+            {
+                string a = textTo.Substring(textTo.Length-2,2);
+                string b = textTo.Substring(0, 11);
+                int sum = 0;
+                int i = 9;
+                foreach(char c in b)
+                {
+                    if (c != ' ')
+                    {
+                        sum = sum + (Convert.ToInt32(c)* i);
+                        i--;
+                    }
+                }
+                if(sum > 99)
+                {
+                    if (sum != 100 || sum != 101) { sum = sum % 101;  }
+                    else { sum = 0; }
+                }
+                b = sum.ToString();
+                if (b.Length<2) {b = ' ' + b; }
+                if(a != b) { MessageBox.Show("Wrong pass"); }
+            }
+        }
         private void userControl11_BackEvent()
         {
-            if(Text!="")Text = Text.Remove(Text.Length-1,1);
+            if (textTo != "")
+            {
+                textTo = textTo.Remove(textTo.Length - 1, 1);
+                if (textTo != "" &&textTo[textTo.Length - 1] == '-')
+                { textTo = textTo.Remove(textTo.Length - 1, 1); }
+            }
         }
     }
 }
