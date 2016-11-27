@@ -12,6 +12,7 @@ namespace WindowsFormsApplication2
 {
     public partial class Form1 : Form
     {
+        public int n;
         public Form1()
         {
             InitializeComponent();
@@ -27,24 +28,28 @@ namespace WindowsFormsApplication2
             textTo = "";   
         }
 
-        private void Get_number()
+        private void CheckForDash()
         {
-            textTo = userControl11.Numbers;
+            if (textTo.Length == 3 || textTo.Length == 7 || textTo.Length == 11) { textTo = textTo + '-'; }
         }
-
-        private void userControl11_MouseClick(object sender, MouseEventArgs e)
+        private void CheckForWord()
         {
-            Get_number();
+            if (textTo.Length > 11)
+            {
+                bool laps = Int32.TryParse(textTo[5].ToString(), out n);
+                if (!laps) { textTo = ""; }
+            }
         }
         
         private void userControl11_numEvent(object sender, ClassLibrary1.UserControl1.NumArgs e)
         {
-            if (textTo.Length == 3|| textTo.Length == 7 || textTo.Length == 11) { textTo = textTo + '-'; }
+            CheckForWord();
             if (textTo.Length < 14)
             {
+                CheckForDash();
                 textTo = textTo + e.n;
             }
-            else { Check(); }
+            if(textTo.Length == 14) { Check(); }
         }
 
         private void userControl11_DeleteEvent()
@@ -61,9 +66,9 @@ namespace WindowsFormsApplication2
                 int i = 9;
                 foreach(char c in b)
                 {
-                    if (c != ' ')
+                    if (c != '-')
                     {
-                        sum = sum + (Convert.ToInt32(c)* i);
+                        sum = sum + (int.Parse(c.ToString())* i);
                         i--;
                     }
                 }
@@ -76,7 +81,13 @@ namespace WindowsFormsApplication2
                 if (b.Length<2) {b = ' ' + b; }
                 if(a != b)
                 {
-                    MessageBox.Show("Wrong pass");
+                    
+                    textTo = "Wrong snils!";
+                }
+                else
+                {
+                    
+                    textTo = "Snils success";
                 }
             }
         }
@@ -85,8 +96,27 @@ namespace WindowsFormsApplication2
             if (textTo != "")
             {
                 textTo = textTo.Remove(textTo.Length - 1, 1);
-                if (textTo != "" &&textTo[textTo.Length - 1] == '-')
+                if (textTo[textTo.Length - 1] == '-')
                 { textTo = textTo.Remove(textTo.Length - 1, 1); }
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar != (char)Keys.Back)
+            {
+                CheckForDash();
+            }
+            if(textTo.Length > 0&&textTo[textTo.Length - 1] == '-') { textBox1.Select(textBox1.Text.Length, 0); }
+            CheckForWord();
+            if (textTo.Length == 14)
+            {
+                Check();
             }
         }
     }
